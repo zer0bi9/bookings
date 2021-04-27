@@ -1,0 +1,24 @@
+.my-footer {
+  height: 4em;
+  background-color: dimgray;
+  margin-top: 1.5em;
+  padding: 1em;
+  color: white;
+  font-size: 80%;
+}
+
+.room-image {
+  max-width: 50%;
+}
+
+.redText {
+  color: red;
+}
+
+.notify-container {
+  box-shadow: none;
+}
+
+.datepicker {
+  z-index: 100000;
+}

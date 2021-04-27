@@ -12,20 +12,21 @@
       integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
       crossorigin="anonymous"
     />
-    <style>
-      .my-footer {
-        height: 4em;
-        background-color: dimgray;
-        margin-top: 1.5em;
-        padding: 1em;
-        color: white;
-        font-size: 80%;
-      }
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.1.4/dist/css/datepicker.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.1.4/dist/css/datepicker-bs4.min.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://unpkg.com/notie/dist/notie.min.css"
+    />
 
-      .room-image {
-        max-width: 50%;
-      }
-    </style>
+    <link rel="stylesheet" type="text/css" href="static/css/styles.css" />
     <title>Generals</title>
   </head>
 
@@ -105,8 +106,13 @@
         <div class="col-md-6">
           <h1 class="mt-5">Search for Availability</h1>
 
-          <form action="reservation.html" method="get">
-            <div class="row">
+          <form
+            action="reservation.html"
+            method="get"
+            novalidate
+            class="needs-validation"
+          >
+            <!-- <div class="row">
               <div class="col">
                 <div class="mb-3">
                   <label for="start_date" class="form-label"
@@ -142,12 +148,51 @@
                   </div>
                 </div>
               </div>
+            </div> -->
+
+            <div class="row">
+              <div class="col">
+                <div class="row" id="reservation-dates">
+                  <div class="col">
+                    <input
+                      required
+                      class="form-control"
+                      type="text"
+                      name="start"
+                      placeholder="Arrival"
+                    />
+                  </div>
+
+                  <div class="col">
+                    <input
+                      required
+                      class="form-control"
+                      type="text"
+                      name="end"
+                      placeholder="Departure"
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
+
+            <hr />
 
             <button type="submit" class="btn btn-primary">
               Search Availability
             </button>
           </form>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <p id="myParagraph">This is the text.</p>
+          <p>
+            <button id="colorButton" class="btn btn-outline-secondary">
+              Click me
+            </button>
+          </p>
         </div>
       </div>
     </div>
@@ -170,5 +215,203 @@
       integrity="sha384-j0CNLUeiqtyaRmlzUHCPZ+Gy5fQu0dQ6eZ/xAww941Ai1SxSY+0EQqNXNE6DZiVc"
       crossorigin="anonymous"
     ></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.1.4/dist/js/datepicker-full.min.js"></script>
+
+    <script src="https://unpkg.com/notie"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+    <script>
+      let attention = Prompt();
+
+      console.log(" I am printing from javascript");
+
+      // Example starter JavaScript for disabling form submissions if there are invalid fields
+      (function () {
+        "use strict";
+
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        let forms = document.querySelectorAll(".needs-validation");
+
+        // Loop over them and prevent submission
+        Array.prototype.slice.call(forms).forEach(function (form) {
+          form.addEventListener(
+            "submit",
+            function (event) {
+              if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+              }
+
+              form.classList.add("was-validated");
+            },
+            false
+          );
+        });
+      })();
+
+      document
+        .getElementById("colorButton")
+        .addEventListener("click", function () {
+          let html = `    <form
+        id="check-availability-form"
+        action=""
+        method="post"
+        novaidate
+        class="needs-validation"
+      >
+        <div class="row">
+          <div clsass="col">
+            <div class="row" id="reservation-dates-modal">
+              <div class="col">
+                <input
+                  disabled
+                  required
+                  class="form-control"
+                  type="text"
+                  name="start"
+                  id="start"
+                  placeholder="Arrival"
+                />
+              </div>
+              <div class="col">
+                <input
+                  disabled
+                  required
+                  class="form-control"
+                  type="text"
+                  name="end"
+                  id="end"
+                  placeholder="Departure"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>`;
+          attention.custom({ msg: html, title: "Choose your dates" });
+        });
+
+      const elem = document.getElementById("reservation-dates");
+      const rangepicker = new DateRangePicker(elem, {
+        // ...options
+        format: "yyyy-mm-dd",
+      });
+
+      // alert
+      function notify(msg, msgType) {
+        notie.alert({
+          type: msgType,
+          text: msg,
+        });
+      }
+
+      function notifyModal(title, html, icon, confirmButtonText) {
+        Swal.fire({
+          title: title,
+          html: html,
+          icon: icon,
+          confirmButtonText: confirmButtonText,
+        });
+      }
+
+      function Prompt() {
+        let toast = function (c) {
+          const { msg = "", icon = "success", position = "top-end" } = c;
+
+          const Toast = Swal.mixin({
+            title: msg,
+            icon: icon,
+            toast: true,
+            position: position,
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener("mouseenter", Swal.stopTimer);
+              toast.addEventListener("mouseleave", Swal.resumeTimer);
+            },
+          });
+
+          Toast.fire({});
+        };
+
+        let success = function (c) {
+          const { msg = "", title = "", footer = "" } = c;
+          swal.fire({
+            icon: "success",
+            title: title,
+            text: msg,
+            footer: footer,
+          });
+        };
+
+        let error = function (c) {
+          const { msg = "", title = "", footer = "" } = c;
+          swal.fire({
+            icon: "error",
+            title: title,
+            text: msg,
+            footer: footer,
+          });
+        };
+
+        async function custom(c) {
+          const { msg = "", title = "" } = c;
+          const { value: fromValues } = await Swal.fire({
+            title: title,
+            html: msg,
+            backdrop: false,
+            focusConfirm: false,
+            showCancelButton: true,
+            willOpen: () => {
+              const elem = document.getElementById("reservation-dates-modal");
+              const rp = new DateRangePicker(elem, {
+                format: "yyyy-mm-dd",
+                showOnFocus: true,
+              });
+            },
+            preConfirm: () => {
+              return [
+                document.getElementById("start").value,
+                document.getElementById("end").value,
+              ];
+            },
+            didOpen: () => {
+              document.getElementById("start").removeAttribute("disabled");
+              document.getElementById("end").removeAttribute("disabled");
+            },
+          });
+
+          if (fromValues) {
+            Swal.fire(JSON.stringify(fromValues));
+          }
+        }
+
+        return {
+          toast: toast,
+          success: success,
+          error: error,
+          custom: custom,
+        };
+      }
+
+      // let myEl = document.getElementById("myParagraph");
+      // myEl.classList.add("redText");
+
+      // Listener
+      // document
+      //   .getElementById("colorButton")
+      //   .addEventListener("click", function () {
+      //     let myEl = document.getElementById("myParagraph");
+
+      //     if (myEl.classList.contains("redText")) {
+      //       myEl.classList.remove("redText");
+      //     } else {
+      //       myEl.classList.add("redText");
+      //     }
+      //   });
+    </script>
   </body>
 </html>
