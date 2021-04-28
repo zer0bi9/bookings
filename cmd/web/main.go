@@ -7,9 +7,9 @@ import (
 	"time"
 
 	"github.com/alexedwards/scs/v2"
-	"github.com/zer0bi9/bookings/pkg/config"
-	"github.com/zer0bi9/bookings/pkg/handlers"
-	"github.com/zer0bi9/bookings/pkg/render"
+	"github.com/zer0bi9/bookings/internal/config"
+	"github.com/zer0bi9/bookings/internal/handlers"
+	"github.com/zer0bi9/bookings/internal/render"
 )
 
 const portNumber = ":1323"
