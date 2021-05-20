@@ -21,6 +21,11 @@ var session *scs.SessionManager
 
 func main() {
 
+	err := run()
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	// what am i going to put int the sesseion
 	gob.Register(models.Reservation{})
 
@@ -65,4 +70,38 @@ func main() {
 
 	err = srv.ListenAndServe()
 	log.Fatal(err)
+}
+
+func run() error {
+
+	gob.Register(models.Reservation{})
+
+	// var app config.AppConfig
+
+	// change this to true when in production
+	app.InProduction = false
+
+	// Session
+	session = scs.New()
+	session.Lifetime = 24 * time.Hour
+	// Session - Store
+	session.Cookie.Persist = true
+	session.Cookie.SameSite = http.SameSiteLaxMode
+	session.Cookie.Secure = app.InProduction
+
+	app.Session = session
+
+	tc, err := render.CreateTemplateCache()
+	if err != nil {
+		log.Fatal("cannot create template cache")
+	}
+
+	app.TemplateCache = tc
+	app.UseCache = false
+
+	repo := handlers.NewRepo(&app)
+	handlers.NewHandlers(repo)
+
+	render.NewTemplate(&app)
+	return nil
 }
